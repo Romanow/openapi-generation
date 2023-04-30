@@ -1,4 +1,0 @@
-spring:
-  profiles.active: local
-  application.name: openapi-generation
-  main.banner-mode: off

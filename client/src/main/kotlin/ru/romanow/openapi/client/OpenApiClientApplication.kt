@@ -1,11 +1,11 @@
-package ru.romanow.openapi
+package ru.romanow.openapi.client
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class OpenApiGenerationApplication
+class OpenApiClientApplication
 
 fun main(args: Array<String>) {
-    runApplication<OpenApiGenerationApplication>(*args)
+    runApplication<OpenApiClientApplication>(*args)
 }

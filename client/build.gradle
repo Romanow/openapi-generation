@@ -1,16 +1,27 @@
 plugins {
     id "org.springframework.boot"
     id "org.jetbrains.kotlin.plugin.spring"
+    id "org.openapi.generator"
 }
 
 dependencies {
-    implementation project(":openapi")
-
     implementation "org.springframework.boot:spring-boot-starter"
     implementation "org.springframework.boot:spring-boot-starter-logging"
     implementation "org.springframework.shell:spring-shell-starter"
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
+}
+
+openApiGenerate {
+    generatorName = "kotlin"
+    templateDir = "$rootDir/openapi/client/templates"
+    configFile = "$rootDir/openapi/client/config.yml"
+    ignoreFileOverride = "$rootDir/openapi/client/.openapi-generator-ignore"
+
+    inputSpec = "$rootDir/openapi/servers.yml"
+    outputDir = "$buildDir/generated"
+
+    verbose = true
 }
 
 bootJar {

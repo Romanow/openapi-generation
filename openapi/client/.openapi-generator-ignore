@@ -1,0 +1,7 @@
+**/*.gradle
+**/gradlew*
+**/README.md
+**/docs/*.md
+**/gradle/
+**/.openapi-generator
+**/.openapi-generator-ignore

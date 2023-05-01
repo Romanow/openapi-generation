@@ -1,5 +1,4 @@
 rootProject.name = "openapi-generation"
 
-include "openapi"
 include "client"
 include "server"

@@ -13,6 +13,6 @@ additionalProperties:
   serializationLibrary: jackson
 
 files:
-  data.mustache:
+  model.mustache:
     templateType: Model
     destinationFilename: .kt

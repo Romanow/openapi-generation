@@ -1,14 +1,18 @@
-apiPackage: "ru.romanow.openapi.client.client"
-modelPackage: "ru.romanow.openapi.client.model"
+apiPackage: "ru.romanow.openapi.models.client"
+modelPackage: "ru.romanow.openapi.models"
 
 debugModels: true
+
 apiDocs: false
-modelDocs: false
 apiTests: false
+modelDocs: false
 modelTests: false
 
 additionalProperties:
   dateLibrary: java8
+  serializationLibrary: jackson
+
 files:
-  enum_class.mustache:
+  data.mustache:
     templateType: Model
+    destinationFilename: .kt

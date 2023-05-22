@@ -23,3 +23,15 @@
     * модифицируем шаблон под себя;
     * отладка шаблона.
 8. Вместо выводов: как поддержать баланс между чувством прекрасного и сгенерированным кодом? [5m]
+
+## Доклад
+
+## Пример
+
+```shell
+$ openapi-generator list
+
+$ openapi-generator author template -g kotlin --library jvm-ktor -o openapi/client/templates
+
+$ openapi-generator config-help -g kotlin
+```

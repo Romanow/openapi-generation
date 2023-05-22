@@ -24,6 +24,14 @@ openApiGenerate {
     verbose = true
 }
 
+sourceSets {
+    main {
+        java {
+            srcDir "${buildDir}/generated/src/main/kotlin"
+        }
+    }
+}
+
 bootJar {
     archiveFileName = "${project.name}.jar"
 }

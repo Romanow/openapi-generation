@@ -3,5 +3,6 @@
 **/README.md
 **/docs/*.md
 **/gradle/
-**/.openapi-generator
 **/.openapi-generator-ignore
+**/org/openapitools/client/infrastructure/*.kt
+**/ru/romanow/openapi/models/client/*.kt

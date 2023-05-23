@@ -12,7 +12,6 @@ ext {
     springBootVersion = "3.0.4"
     springShellVersion = "3.0.1"
     openApiVersion = "2.1.0"
-    logbookVersion = "3.0.0-RC.2"
     jetbrainsAnnotationsVersion = "24.0.1"
     postgresContainerVersion = "1.17.6"
 }

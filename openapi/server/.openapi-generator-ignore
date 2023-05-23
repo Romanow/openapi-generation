@@ -1,0 +1,7 @@
+**/pom.xml
+**/README.md
+**/docs/*.md
+**/gradle/
+**/.openapi-generator-ignore
+**/org/openapitools/*.kt
+**/ru/romanow/openapi/server/web/ApiUtil.kt

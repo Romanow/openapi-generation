@@ -6,7 +6,7 @@ spring:
   application.name: server
   main.banner-mode: off
   jpa:
-    hibernate.ddl-auto: validate
+    hibernate.ddl-auto: update
     open-in-view: false
 
 management:
@@ -19,19 +19,3 @@ management:
   health.diskspace.enabled: false
   endpoint.health.show-details: always
   info.git.mode: simple
-
-logbook:
-  include:
-    - /api/**
-  exclude:
-    - /manage/**
-  filter.enabled: true
-  format.style: http
-  minimum-status: 200
-  obfuscate:
-    headers:
-      - Authorization
-
-logging:
-  level:
-    org.zalando.logbook: TRACE

@@ -1,5 +1,5 @@
-apiPackage: "ru.romanow.openapi.models.client"
-modelPackage: "ru.romanow.openapi.models"
+apiPackage: "ru.romanow.openapi.client.rest"
+modelPackage: "ru.romanow.openapi.client.models"
 
 debugModels: true
 
@@ -11,6 +11,7 @@ modelTests: false
 additionalProperties:
   dateLibrary: java8
   serializationLibrary: jackson
+  enumPropertyNaming: 'UPPERCASE'
 
 files:
   model.mustache:

@@ -5,4 +5,4 @@
 **/gradle/
 **/.openapi-generator-ignore
 **/org/openapitools/client/infrastructure/*.kt
-**/ru/romanow/openapi/models/client/*.kt
+**/ru/romanow/openapi/client/rest/*.kt

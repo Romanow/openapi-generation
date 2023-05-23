@@ -2,6 +2,7 @@ plugins {
     id "org.springframework.boot"
     id "org.jetbrains.kotlin.plugin.spring"
     id "org.jetbrains.kotlin.plugin.jpa"
+    id "org.openapi.generator"
 }
 
 dependencies {
@@ -12,10 +13,28 @@ dependencies {
 
     implementation "org.postgresql:postgresql"
 
-    implementation "org.zalando:logbook-spring-boot-starter:$logbookVersion"
-
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "org.testcontainers:postgresql:$postgresContainerVersion"
+}
+
+openApiGenerate {
+    generatorName = "kotlin-spring"
+    templateDir = "$rootDir/openapi/server/templates"
+    configFile = "$rootDir/openapi/server/config.yml"
+    ignoreFileOverride = "$rootDir/openapi/server/.openapi-generator-ignore"
+
+    inputSpec = "$rootDir/openapi/servers.yml"
+    outputDir = "$buildDir/generated"
+}
+
+compileKotlin.dependsOn(tasks.openApiGenerate)
+
+sourceSets {
+    main {
+        java {
+            srcDir "${buildDir}/generated/src/main/kotlin"
+        }
+    }
 }
 
 bootJar {

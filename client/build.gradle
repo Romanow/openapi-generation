@@ -20,9 +20,9 @@ openApiGenerate {
 
     inputSpec = "$rootDir/openapi/servers.yml"
     outputDir = "$buildDir/generated"
-
-    verbose = true
 }
+
+compileKotlin.dependsOn(tasks.openApiGenerate)
 
 sourceSets {
     main {

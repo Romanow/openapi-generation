@@ -110,14 +110,8 @@ paths:
     get:
       tags:
         - Server API
-      summary: Find servers in city
-      operationId: all_1
-      parameters:
-        - name: city
-          in: query
-          required: true
-          schema:
-            type: string
+      summary: Find all servers
+      operationId: all
       responses:
         '200':
           description: OK

@@ -1,0 +1,16 @@
+{
+  "groups": [
+    {
+      "name": "services",
+      "type": "ru.romanow.openapi.client.config.properties.ServiceUrlProperties",
+      "sourceType": "ru.romanow.openapi.client.config.properties.ServiceUrlProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "application.services.server-url",
+      "type": "java.lang.String",
+      "description": "Server url."
+    }
+  ]
+}

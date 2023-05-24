@@ -33,13 +33,15 @@
 реализовываться в _Сервисе B_, а _Сервис А_ может начать его использовать на заглушках (например, с помощью WireMock или
 Postman Mock Server).
 
+![Communication](images/Communication.png)
+
 Как контролировать корректность данных, которые будут в заглушках, мы не будем рассматривать, скажу лишь, что стоит
 смотреть в сторону [контрактных тестов](https://github.com/Romanow/scc-contracts)
 ([Использование Spring Cloud Contract как альтернатива для интеграционных тестов](https://www.youtube.com/watch?v=iavb9QiD60Y)).
 
 ### Что такое контракт? OpenAPI
 
-Контракт – это соглашение о том, как будет выглядеть наше API и какие парамеры оно будет принимать.
+Контракт – это соглашение о том, как будет выглядеть наше API и какие параметры оно будет принимать.
 
 В рамках доклада будем рассматривать синхронную коммуникацию с помощью REST, следовательно, мы строим наше API на базе
 протокола HTTP. Самым распространенным способом описания контракта для REST сервисов
@@ -111,7 +113,7 @@ $ openapi-generator generate \
 ![Generated client](images/Generated%20client%20start.png)
 
 Посмотрим на
-файл [client/build/generated/src/main/kotlin/ru/romanowopenapi/client/model/ServerResponse](client/build/generated/src/main/kotlin/ru/romanowopenapi/client/models/ServerResponse.kt):
+файл [ServerResponse](client/build/generated/src/main/kotlin/ru/romanow/openapi/client/models/ServerResponse.kt):
 
 ```kotlin
 /**
@@ -233,7 +235,7 @@ $ openapi-generator author template -g kotlin --library jvm-ktor -o openapi/clie
 * [APIDocs](openapi/client/templates/api_doc.mustache) – markdown описание API;
 * [Model](openapi/client/templates/model.mustache) – модели;
 * [ModelDocs](openapi/client/templates/model_doc.mustache) – markdown описание моделей;
-* SupportingFiles – дополнительные файл.
+* SupportingFiles – дополнительные файлы.
 
 Нам нужна кастомизация моделей, поэтому удаляем лишнее и оставляем только три файла:
 

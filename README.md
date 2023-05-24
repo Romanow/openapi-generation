@@ -14,13 +14,11 @@
 1. Постановка задачи: коммуникация между командами разработки при совместной работе над одной задачей. [5m]
 2. Что такое контракт? OpenAPI. [2m]
 3. Contract First vs. Code First. Плюсы и минусы подхода. [5m]
-4. Генерируем код по контракту на клиенте и сервере, разбираем что получилось. [10m]
-5. Рассматриваем что умеет проект [OpenAPI Generator](https://openapi-generator.tech/). [5m]
+4. Рассматриваем что умеет проект [OpenAPI Generator](https://openapi-generator.tech/). [5m]
+5. Генерируем код по контракту на клиенте и сервере, разбираем что получилось. [10m]
+    * убираем лишние файлы;
 6. Используем свои шаблоны генерации кода по OpenAPI: [15]
     * структура шаблона;
-    * убираем лишние файлы (`.openapi-generator-ignore` и global и additional properties);
-    * модифицируем шаблон под себя;
-    * отладка шаблона.
 7. Вместо выводов: как поддержать баланс между чувством прекрасного и сгенерированным кодом? [5m]
 
 ## Доклад
@@ -113,7 +111,7 @@ $ openapi-generator generate \
 ![Generated client](images/Generated%20client%20start.png)
 
 Посмотрим на
-файл [client/build/generated/src/main/kotlin/ru/romanow/openapi/client/model/ServerResponse](client/build/generated/src/main/kotlin/ru/romanow/openapi/client/models/ServerResponse.kt):
+файл [client/build/generated/src/main/kotlin/ru/romanowopenapi/client/model/ServerResponse](client/build/generated/src/main/kotlin/ru/romanowopenapi/client/models/ServerResponse.kt):
 
 ```kotlin
 /**
@@ -225,7 +223,7 @@ $ openapi-generator generate \
 $ openapi-generator author template -g kotlin --library jvm-ktor -o openapi/client/templates
 ```
 
-Заходим в [/openapi/client/templates](/openapi/client/templates) и видим большое количество шаблонов:
+Заходим в [openapi/client/templates](openapi/client/templates) и видим большое количество шаблонов:
 
 ![OpenAPI codegen templates](images/OpenAPI%20codegen%20templates.png)
 
@@ -243,7 +241,7 @@ $ openapi-generator author template -g kotlin --library jvm-ktor -o openapi/clie
 * [data class](openapi/client/templates/data_class.mustache) – `data class`;
 * [enum](openapi/client/templates/enum_class.mustache) – `enum`.
 
-Откатим изменения в [/openapi/client/templates](/openapi/client/templates):
+Откатим изменения в [openapi/client/templates](openapi/client/templates):
 
 ```shell
 $ rm -r openapi/client/templates
@@ -365,7 +363,7 @@ $ openapi-generator generate \
 требуется убрать сгенерированные файлы, то просто описываем их
 в [\.openapi-generator-ignore](openapi/client/.openapi-generator-ignore).
 
-#### Вместо выводов: как поддержать баланс между чувством прекрасного и сгенерированным кодом?
+### Вместо выводов: как поддержать баланс между чувством прекрасного и сгенерированным кодом?
 
 1. Если разработка идет в одной команде, то возможно Code First вам подойдет, т.к. для него не требуется никаких
    особенных настроек.

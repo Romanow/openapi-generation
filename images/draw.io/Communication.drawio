@@ -1,1 +1,30 @@
-<mxfile host="Electron" modified="2023-05-24T18:58:52.212Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/15.7.3 Chrome/91.0.4472.164 Electron/13.6.1 Safari/537.36" etag="VnOiuVAQS1Iyz5x0vW1U" version="15.7.3" type="device"><diagram id="r1lJz0A7Nyj0sMlimptT" name="Страница 1">3ZbbbqMwEIafhsusOMQJuUyT7EmtVG0qVdo7Bwx41zDImBz69DvAEEJIqnYPVbVX2L/NeDzfzIDlLdL9J83z5A5CoSzXDveWt7Rc12GTCT4q5dAosykJsZYhbeqEtXwSJNqkljIURW+jAVBG5n0xgCwTgelpXGvY9bdFoPqn5jwWA2EdcDVUH2VoElKdyaxb+CxknNDRvjttFlLebqabFAkPYXcieSvLW2gA04zS/UKoKnhtXJr3Pl5ZPTqmRWZe8kIaPu7970t/nGZZNPa/6qUORh75Zg7thUWI96cpaJNADBlXq0690VBmoais2jjr9twC5Cg6KP4QxhwIJi8NoJSYVNFqBJmhRYfhvDAafh7Di4G5abyqXLl6WZIKKHUgnrlhmzRcx8I8s889IsFcFpAKow/4nhaKG7nt+8EpqeLjvi7uOKDQvwID1cSWq5JO+rZaP6Ayv/9ykdAt32Ch9aLKlYwzHAcYIqFR2AptJGbynBZSGYYNQFHIJ76p7VUIc5CZqa/Ebiy2vECI3EODYm9dKDsy1iX7KanriTcMN1kf2R9c36PkpM7BmtmLgZDx++pynWVn2jM6cljfAkRRgXlyDvTo4u8zdgaM10JvJSYvYh5A7oqsYrtLpBHrnNeZvsNO20c/LKBzgPWcrNclKJVagAJdn+ZFfiCC4GjpZGXjszGzn0uBQVFepeq1TZ2C785ovjvprG0GJSdNdWL/o7pz3zOTSEwuMwmns439l5gw9t6YjAdMHlbzO1ScARD8pObVsEzVPDBw2vTqBnkPhTQSqua3AWMgvdAVDZyBg9IomWG82x8K+xWfrD+rjzMW3nTIwntLFOwaCvd/R8Fm7K1Q4LT7CWw+Nt2vtLf6BQ==</diagram></mxfile>
+<mxfile host="Electron" modified="2023-06-06T10:56:34.766Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.1.2 Chrome/106.0.5249.199 Electron/21.4.3 Safari/537.36" etag="2n7YQ4b-6aNOuM4Z2pTD" version="21.1.2" type="device">
+  <diagram id="r1lJz0A7Nyj0sMlimptT" name="Страница 1">
+    <mxGraphModel dx="954" dy="674" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="mdWx8ZD84mnnf48JrDrc-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=15;strokeWidth=2;" parent="1" source="mdWx8ZD84mnnf48JrDrc-1" target="mdWx8ZD84mnnf48JrDrc-2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mdWx8ZD84mnnf48JrDrc-6" value="REST API" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=15;" parent="mdWx8ZD84mnnf48JrDrc-3" vertex="1" connectable="0">
+          <mxGeometry x="-0.2833" y="5" relative="1" as="geometry">
+            <mxPoint x="17" y="-15" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mdWx8ZD84mnnf48JrDrc-1" value="Service A" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=15;fontStyle=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="310" y="290" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="mdWx8ZD84mnnf48JrDrc-2" value="Service B" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=15;fontStyle=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+          <mxGeometry x="550" y="290" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="mdWx8ZD84mnnf48JrDrc-4" value="TEAM 1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=15;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry x="350" y="370" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="mdWx8ZD84mnnf48JrDrc-5" value="TEAM 2" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=15;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry x="595" y="370" width="30" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

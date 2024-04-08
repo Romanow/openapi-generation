@@ -4,7 +4,7 @@ import io.restassured.builder.RequestSpecBuilder
 import io.restassured.config.ObjectMapperConfig.objectMapperConfig
 import io.restassured.config.RestAssuredConfig
 import io.restassured.filter.log.ErrorLoggingFilter
-import org.apache.http.HttpHeaders.LOCATION
+import org.apache.http.HttpHeaders
 import org.apache.http.HttpStatus.SC_CREATED
 import org.apache.http.HttpStatus.SC_NOT_FOUND
 import org.apache.http.HttpStatus.SC_NO_CONTENT
@@ -19,12 +19,23 @@ import ru.romanow.openapi.test.JacksonObjectMapper.jackson
 import ru.romanow.openapi.test.ResponseSpecBuilders.shouldBeCode
 import ru.romanow.openapi.test.ResponseSpecBuilders.validatedWith
 import ru.romanow.openapi.test.model.CreateServerRequest
+import ru.romanow.openapi.test.model.ServerResponse
 import ru.romanow.openapi.test.model.ServerResponse.PurposeEnum
 import ru.romanow.openapi.test.model.ServerResponse.PurposeEnum.BACKEND
+import ru.romanow.openapi.test.model.ServerResponse.PurposeEnum.FRONTEND
 import ru.romanow.openapi.test.model.StateInfo
 import ru.romanow.openapi.test.web.ServerApiApi
 import java.util.function.BiPredicate
 
+/**
+ * * Сделать несколько веток по повествованию.
+ * * Сделать ветку с полностью описанным тестом.
+ * * В `build.gradle` не писать код, а закомментировать.
+ * * Написать requirements: Docker, Java.
+ * * Описать шаблон на слайдах.
+ * * Обновить QR codes.
+ * * Добавить ссылку на проект перед live-coding.
+ */
 @TestMethodOrder(OrderAnnotation::class)
 class ServerTest {
 
@@ -55,17 +66,16 @@ class ServerTest {
 
         val size = servers.size
 
-        val request = buildCreateServerRequest()
-        val location = api.create()
-            .body(request)
+        var request = buildCreateServerRequest()
+        val location = api.create().body(request)
             .execute(validatedWith(shouldBeCode(SC_CREATED)))
-            .header(LOCATION)
+            .header(HttpHeaders.LOCATION)
 
+        // https://localhost:8080/api/v1/servers/{serverId}
+        assertThat(location).contains("/api/v1/servers/")
         val serverId = location.substringAfterLast("/")
-        assertThat(location).contains("/api/v1/servers/$serverId")
 
-        val server = api.byId
-            .idPath(serverId)
+        var server: ServerResponse = api.byId.idPath(serverId)
             .executeAs(validatedWith(shouldBeCode(SC_OK)))
 
         assertThat(server)
@@ -80,20 +90,30 @@ class ServerTest {
 
         assertThat(servers).hasSize(size + 1)
 
-        api.delete()
+        request = buildCreateServerRequest(purpose = FRONTEND)
+        server = api.fullUpdate()
             .idPath(serverId)
+            .body(request)
+            .executeAs(validatedWith(shouldBeCode(SC_OK)))
+
+        assertThat(server)
+            .usingRecursiveComparison()
+            .withEqualsForFields(BiPredicate { t: PurposeEnum, u: String -> t.name == u }, "purpose")
+            .ignoringFields("id", "state.id")
+            .isEqualTo(request)
+
+        api.delete().idPath(serverId)
             .execute(validatedWith(shouldBeCode(SC_NO_CONTENT)))
 
-        api.byId
-            .idPath(serverId)
+        api.byId.idPath(serverId)
             .executeAs(validatedWith(shouldBeCode(SC_NOT_FOUND)))
     }
 
-    private fun buildCreateServerRequest() =
+    private fun buildCreateServerRequest(purpose: PurposeEnum = BACKEND) =
         CreateServerRequest().also {
             it.bandwidth = 100
             it.latency = 100
-            it.purpose = BACKEND.name
+            it.purpose = purpose.name
             it.state = StateInfo()
                 .also { s ->
                     s.city = "Moscow"

@@ -1,0 +1,13 @@
+library: rest-assured
+
+apiPackage: "ru.romanow.openapi.test.web"
+modelPackage: "ru.romanow.openapi.test.model"
+
+debugModels: true
+
+additionalProperties:
+  dateLibrary: java8
+  useJakartaEe: true
+  serializationLibrary: jackson
+  documentationProvider: none
+  hideGenerationTimestamp: true

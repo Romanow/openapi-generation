@@ -38,3 +38,7 @@ sourceSets {
 bootJar {
     archiveFileName = "${project.name}.jar"
 }
+
+jar {
+    enabled = false
+}

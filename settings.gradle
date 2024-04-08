@@ -2,3 +2,4 @@ rootProject.name = "openapi-generation"
 
 include "client"
 include "server"
+include "integration-test"

@@ -1,24 +1,30 @@
 plugins {
     id "idea"
-    id "org.jetbrains.kotlin.jvm" version "1.7.10"
-    id "org.jetbrains.kotlin.plugin.jpa" version "1.7.10" apply false
-    id "org.jetbrains.kotlin.plugin.spring" version "1.7.10" apply false
-    id "org.springframework.boot" version "3.0.4" apply false
+    id "java"
+    id "org.jetbrains.kotlin.jvm" version "1.9.22"
+    id "org.jetbrains.kotlin.plugin.jpa" version "1.9.22" apply false
+    id "org.jetbrains.kotlin.plugin.spring" version "1.9.22" apply false
+    id "org.jlleitschuh.gradle.ktlint" version "12.1.0" apply false
+    id "org.springframework.boot" version "3.2.4" apply false
     id "io.spring.dependency-management" version "1.1.0"
     id "org.openapi.generator" version "6.5.0" apply false
 }
 
 ext {
-    springBootVersion = "3.0.4"
-    springShellVersion = "3.0.1"
+    springBootVersion = "3.2.4"
+    springShellVersion = "3.2.3"
     openApiVersion = "2.1.0"
-    jetbrainsAnnotationsVersion = "24.0.1"
+    openApiToolsVersion = "0.2.6"
+    jakartaAnnotationsVersion = "2.1.1"
+    restAssuredVersion = "5.4.0"
     postgresContainerVersion = "1.17.6"
 }
 
 allprojects { ->
     apply plugin: "idea"
+    apply plugin: "java"
     apply plugin: "kotlin"
+    apply plugin: "org.jlleitschuh.gradle.ktlint"
     apply plugin: "io.spring.dependency-management"
 
     idea {
@@ -34,6 +40,13 @@ allprojects { ->
         mavenCentral()
     }
 
+    ktlint {
+        version.set("1.2.1")
+        filter {
+            exclude { entry -> entry.file.toString().contains("generated") }
+        }
+    }
+
     dependencyManagement {
         imports {
             mavenBom "org.springframework.boot:spring-boot-dependencies:$springBootVersion"
@@ -45,7 +58,6 @@ allprojects { ->
         implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
         implementation "org.jetbrains.kotlin:kotlin-reflect"
         implementation "com.fasterxml.jackson.module:jackson-module-kotlin"
-        implementation "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"
     }
 
     test {

@@ -1,0 +1,15 @@
+**/.github/
+**/api/
+**/docs/
+**/gradle/
+**/test/java/
+**/.gitignore
+**/.travis.yml
+**/*.gradle
+**/*.sbt
+**/git_push.sh
+**/gradle.properties
+**/gradlew*
+**/pom.xml
+**/README.md
+**/AndroidManifest.xml

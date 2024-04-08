@@ -1,0 +1,59 @@
+plugins {
+    id "org.openapi.generator"
+}
+
+idea {
+    module {
+        testSourceDirs += file("src/integrationTest/java")
+    }
+}
+
+configurations {
+    integrationTestImplementation.extendsFrom testImplementation
+    integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
+}
+
+dependencies {
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+    implementation "jakarta.annotation:jakarta.annotation-api:$jakartaAnnotationsVersion"
+    implementation "org.openapitools:jackson-databind-nullable:$openApiToolsVersion"
+    implementation "io.rest-assured:rest-assured:$restAssuredVersion"
+
+    integrationTestImplementation "org.assertj:assertj-core"
+    integrationTestImplementation "org.springframework.boot:spring-boot-starter-test"
+}
+
+openApiGenerate {
+    generatorName = "java"
+    configFile = "$rootDir/openapi/test/config.yml"
+    ignoreFileOverride = "$rootDir/openapi/test/.openapi-generator-ignore"
+
+    inputSpec = "$rootDir/openapi/servers.yml"
+    outputDir = "$buildDir/generated"
+}
+
+compileKotlin.dependsOn(tasks.openApiGenerate)
+
+sourceSets {
+    main {
+        java {
+            srcDir "${buildDir}/generated/src/main/java"
+        }
+    }
+    integrationTest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+
+tasks.register("integrationTest", Test) {
+    description = "Runs integration tests."
+    group = "verification"
+
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+integrationTest {
+    useJUnitPlatform()
+}

@@ -22,10 +22,8 @@ import ru.romanow.openapi.test.model.CreateServerRequest
 import ru.romanow.openapi.test.model.Purpose
 import ru.romanow.openapi.test.model.Purpose.BACKEND
 import ru.romanow.openapi.test.model.Purpose.FRONTEND
-import ru.romanow.openapi.test.model.ServerResponse
 import ru.romanow.openapi.test.model.StateInfo
 import ru.romanow.openapi.test.web.ServerApi
-import java.util.function.BiPredicate
 
 /**
  * * Сделать несколько веток по повествованию.
@@ -64,23 +62,24 @@ class ServerTest {
             .executeAs(validatedWith(shouldBeCode(SC_OK)))
             .servers
 
-        val size = servers.size
+        val initialSize = servers.size
 
         var request = buildCreateServerRequest()
-        val location = api.create().body(request)
+        val location = api.create()
+            .body(request)
             .execute(validatedWith(shouldBeCode(SC_CREATED)))
             .header(HttpHeaders.LOCATION)
 
-        // https://localhost:8080/api/v1/servers/{serverId}
+        // Location: https://localhost:8080/api/v1/servers/{{serverId}}
         assertThat(location).contains("/api/v1/servers/")
         val serverId = location.substringAfterLast("/")
 
-        var server: ServerResponse = api.byId.idPath(serverId)
+        var server = api.byId
+            .idPath(serverId)
             .executeAs(validatedWith(shouldBeCode(SC_OK)))
 
         assertThat(server)
             .usingRecursiveComparison()
-            .withEqualsForFields(BiPredicate { t: Purpose, u: String -> t.name == u }, "purpose")
             .ignoringFields("id", "state.id")
             .isEqualTo(request)
 
@@ -88,7 +87,7 @@ class ServerTest {
             .executeAs(validatedWith(shouldBeCode(SC_OK)))
             .servers
 
-        assertThat(servers).hasSize(size + 1)
+        assertThat(servers).hasSize(initialSize + 1)
 
         request = buildCreateServerRequest(purpose = FRONTEND)
         server = api.fullUpdate()
@@ -98,7 +97,6 @@ class ServerTest {
 
         assertThat(server)
             .usingRecursiveComparison()
-            .withEqualsForFields(BiPredicate { t: Purpose, u: String -> t.name == u }, "purpose")
             .ignoringFields("id", "state.id")
             .isEqualTo(request)
 

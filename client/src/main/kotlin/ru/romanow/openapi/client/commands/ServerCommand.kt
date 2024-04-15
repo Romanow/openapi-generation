@@ -8,6 +8,9 @@ import org.springframework.shell.standard.ShellMethod
 import org.springframework.shell.standard.ShellOption
 import org.springframework.shell.standard.ValueProvider
 import org.springframework.stereotype.Component
+import ru.romanow.openapi.client.models.Purpose.BACKEND
+import ru.romanow.openapi.client.models.Purpose.DATABASE
+import ru.romanow.openapi.client.models.Purpose.FRONTEND
 import ru.romanow.openapi.client.service.ServerClient
 
 @ShellComponent
@@ -71,6 +74,6 @@ class ServerCommand(
 @Component
 class ServerTypeProvider : ValueProvider {
     override fun complete(completionContext: CompletionContext): List<CompletionProposal> {
-        return listOf("DATABASE", "BACKEND", "FRONTEND").map { CompletionProposal(it) }
+        return listOf(DATABASE.name, BACKEND.name, FRONTEND.name).map { CompletionProposal(it) }
     }
 }

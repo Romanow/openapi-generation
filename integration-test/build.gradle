@@ -11,6 +11,7 @@ idea {
 configurations {
     integrationTestImplementation.extendsFrom testImplementation
     integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
+    integrationTestAnnotationProcessor.extendsFrom testAnnotationProcessor
 }
 
 dependencies {
@@ -18,6 +19,8 @@ dependencies {
     implementation "jakarta.annotation:jakarta.annotation-api:$jakartaAnnotationsVersion"
     implementation "org.openapitools:jackson-databind-nullable:$openApiToolsVersion"
     implementation "io.rest-assured:rest-assured:$restAssuredVersion"
+    compileOnly "org.projectlombok:lombok"
+    annotationProcessor "org.projectlombok:lombok"
 
     integrationTestImplementation "org.assertj:assertj-core"
     integrationTestImplementation "org.springframework.boot:spring-boot-starter-test"
@@ -27,6 +30,7 @@ openApiGenerate {
     generatorName = "java"
     configFile = "$rootDir/openapi/test/config.yml"
     ignoreFileOverride = "$rootDir/openapi/test/.openapi-generator-ignore"
+    templateDir = "$rootDir/openapi/test/templates"
 
     inputSpec = "$rootDir/openapi/servers.yml"
     outputDir = "$buildDir/generated"

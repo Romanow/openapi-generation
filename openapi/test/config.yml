@@ -11,3 +11,8 @@ additionalProperties:
   serializationLibrary: jackson
   documentationProvider: none
   hideGenerationTimestamp: true
+
+files:
+  model.mustache:
+    templateType: Model
+    destinationFilename: .java

@@ -1,15 +1,15 @@
 openapi: 3.0.1
 info:
   title: OpenAPI definition
-  version: v0
+  version: v1
 servers:
   - url: http://localhost:8080
-    description: Generated server url
+    description: Local
 paths:
   /api/v1/servers/{id}:
     get:
       tags:
-        - Server API
+        - server
       summary: Get server by Id
       operationId: getById
       parameters:
@@ -26,12 +26,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServerResponse'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/ServerResponse'
     put:
       tags:
-        - Server API
+        - server
       summary: Full update server by Id
       operationId: fullUpdate
       parameters:
@@ -46,9 +43,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateServerRequest'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/CreateServerRequest'
         required: true
       responses:
         '200':
@@ -57,12 +51,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServerResponse'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/ServerResponse'
     delete:
       tags:
-        - Server API
+        - server
       summary: Delete server by Id
       operationId: delete
       parameters:
@@ -77,7 +68,7 @@ paths:
           description: No Content
     patch:
       tags:
-        - Server API
+        - server
       summary: Edit server by Id
       operationId: partialUpdate
       parameters:
@@ -92,9 +83,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateServerRequest'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/CreateServerRequest'
         required: true
       responses:
         '200':
@@ -103,13 +91,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServerResponse'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/ServerResponse'
   /api/v1/servers:
     get:
       tags:
-        - Server API
+        - server
       summary: Find all servers
       operationId: all
       responses:
@@ -119,20 +104,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServersResponse'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/ServersResponse'
     post:
       tags:
-        - Server API
+        - server
       summary: Save new server
       operationId: create
       requestBody:
         content:
           application/json:
-            schema:
-              $ref: '#/components/schemas/CreateServerRequest'
-          application/xml:
             schema:
               $ref: '#/components/schemas/CreateServerRequest'
         required: true
@@ -150,7 +129,7 @@ components:
       type: object
       properties:
         purpose:
-          type: string
+          $ref: '#/components/schemas/Purpose'
         latency:
           maximum: 100
           minimum: 0
@@ -189,11 +168,7 @@ components:
           type: integer
           format: int32
         purpose:
-          type: string
-          enum:
-            - FRONTEND
-            - BACKEND
-            - DATABASE
+          $ref: '#/components/schemas/Purpose'
         latency:
           type: integer
           format: int32
@@ -211,3 +186,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ServerResponse'
+    Purpose:
+      type: string
+      enum:
+        - FRONTEND
+        - BACKEND
+        - DATABASE

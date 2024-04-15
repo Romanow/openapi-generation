@@ -34,7 +34,7 @@ class ServerServiceImpl(
         var server = Server(
             latency = request.latency!!,
             bandwidth = request.bandwidth!!,
-            purpose = findPurpose(request.purpose!!),
+            purpose = request.purpose!!,
             state = State(city = request.state?.city, country = request.state?.country)
         )
         server = serverRepository.save(server)
@@ -53,7 +53,7 @@ class ServerServiceImpl(
 
         request.bandwidth?.let { server.bandwidth = it }
         request.latency?.let { server.latency = it }
-        request.purpose?.let { server.purpose = findPurpose(it) }
+        request.purpose?.let { server.purpose = it }
         request.state?.city?.let { server.state?.city = it }
         request.state?.country?.let { server.state?.country = it }
         return buildServerResponse(server)

@@ -7,6 +7,7 @@ import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.toEntity
 import reactor.core.publisher.Mono
 import ru.romanow.openapi.client.models.CreateServerRequest
+import ru.romanow.openapi.client.models.Purpose
 import ru.romanow.openapi.client.models.ServerResponse
 import ru.romanow.openapi.client.models.ServersResponse
 import ru.romanow.openapi.client.models.StateInfo
@@ -19,10 +20,10 @@ class ServerClient(
 
     fun create(purpose: String): String {
         val request = CreateServerRequest(
-            purpose = purpose,
+            purpose = Purpose.valueOf(purpose),
             latency = 10,
             bandwidth = 10000,
-            state = StateInfo(city = "Yerevan", country = "Armenia")
+            state = StateInfo(city = "Moscow", country = "Russia")
         )
 
         val location = webClient.post()
@@ -71,7 +72,7 @@ class ServerClient(
         id: Int, purpose: String?, latency: Int?, bandwidth: Int?, city: String?, country: String?
     ): String {
         val request = CreateServerRequest(
-            purpose = purpose,
+            purpose = if (purpose != null) Purpose.valueOf(purpose) else null,
             latency = latency,
             bandwidth = bandwidth,
             state = StateInfo(city = city, country = country)

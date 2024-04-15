@@ -19,12 +19,12 @@ import ru.romanow.openapi.test.JacksonObjectMapper.jackson
 import ru.romanow.openapi.test.ResponseSpecBuilders.shouldBeCode
 import ru.romanow.openapi.test.ResponseSpecBuilders.validatedWith
 import ru.romanow.openapi.test.model.CreateServerRequest
+import ru.romanow.openapi.test.model.Purpose
+import ru.romanow.openapi.test.model.Purpose.BACKEND
+import ru.romanow.openapi.test.model.Purpose.FRONTEND
 import ru.romanow.openapi.test.model.ServerResponse
-import ru.romanow.openapi.test.model.ServerResponse.PurposeEnum
-import ru.romanow.openapi.test.model.ServerResponse.PurposeEnum.BACKEND
-import ru.romanow.openapi.test.model.ServerResponse.PurposeEnum.FRONTEND
 import ru.romanow.openapi.test.model.StateInfo
-import ru.romanow.openapi.test.web.ServerApiApi
+import ru.romanow.openapi.test.web.ServerApi
 import java.util.function.BiPredicate
 
 /**
@@ -39,7 +39,7 @@ import java.util.function.BiPredicate
 @TestMethodOrder(OrderAnnotation::class)
 class ServerTest {
 
-    private lateinit var api: ServerApiApi
+    private lateinit var api: ServerApi
 
     @BeforeEach
     fun init() {
@@ -55,7 +55,7 @@ class ServerTest {
                     .setBaseUri("http://localhost:8080")
             }
         )
-            .serverApi()
+            .server()
     }
 
     @Test
@@ -80,7 +80,7 @@ class ServerTest {
 
         assertThat(server)
             .usingRecursiveComparison()
-            .withEqualsForFields(BiPredicate { t: PurposeEnum, u: String -> t.name == u }, "purpose")
+            .withEqualsForFields(BiPredicate { t: Purpose, u: String -> t.name == u }, "purpose")
             .ignoringFields("id", "state.id")
             .isEqualTo(request)
 
@@ -98,7 +98,7 @@ class ServerTest {
 
         assertThat(server)
             .usingRecursiveComparison()
-            .withEqualsForFields(BiPredicate { t: PurposeEnum, u: String -> t.name == u }, "purpose")
+            .withEqualsForFields(BiPredicate { t: Purpose, u: String -> t.name == u }, "purpose")
             .ignoringFields("id", "state.id")
             .isEqualTo(request)
 
@@ -109,11 +109,11 @@ class ServerTest {
             .executeAs(validatedWith(shouldBeCode(SC_NOT_FOUND)))
     }
 
-    private fun buildCreateServerRequest(purpose: PurposeEnum = BACKEND) =
+    private fun buildCreateServerRequest(purpose: Purpose = BACKEND) =
         CreateServerRequest().also {
             it.bandwidth = 100
             it.latency = 100
-            it.purpose = purpose.name
+            it.purpose = purpose
             it.state = StateInfo()
                 .also { s ->
                     s.city = "Moscow"

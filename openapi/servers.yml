@@ -127,6 +127,16 @@ components:
         - purpose
         - state
       type: object
+      example:
+        {
+          "bandwidth": 100,
+          "latency": 100,
+          "purpose": "BACKEND",
+          "state": {
+            "city": "Moscow",
+            "country": "Russia"
+          }
+        }
       properties:
         purpose:
           $ref: '#/components/schemas/Purpose'
@@ -147,6 +157,12 @@ components:
         - city
         - country
       type: object
+      example:
+        {
+          "id": 1,
+          "city": "Moscow",
+          "country": "Russia"
+        }
       properties:
         id:
           type: integer
@@ -163,6 +179,18 @@ components:
         - purpose
         - state
       type: object
+      example:
+        {
+          "id": 1,
+          "bandwidth": 100,
+          "latency": 100,
+          "purpose": "BACKEND",
+          "state": {
+            "id": 1,
+            "city": "Moscow",
+            "country": "Russia"
+          }
+        }
       properties:
         id:
           type: integer

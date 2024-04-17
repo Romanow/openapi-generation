@@ -3,7 +3,8 @@ package ru.romanow.openapi.test
 import io.restassured.builder.RequestSpecBuilder
 import io.restassured.config.ObjectMapperConfig.objectMapperConfig
 import io.restassured.config.RestAssuredConfig
-import io.restassured.filter.log.ErrorLoggingFilter
+import io.restassured.filter.log.RequestLoggingFilter
+import io.restassured.filter.log.ResponseLoggingFilter
 import org.apache.http.HttpHeaders
 import org.apache.http.HttpStatus.SC_CREATED
 import org.apache.http.HttpStatus.SC_NOT_FOUND
@@ -19,7 +20,6 @@ import ru.romanow.openapi.test.ResponseSpecBuilders.validatedWith
 import ru.romanow.openapi.test.model.CreateServerRequest
 import ru.romanow.openapi.test.model.Purpose
 import ru.romanow.openapi.test.model.Purpose.BACKEND
-import ru.romanow.openapi.test.model.Purpose.FRONTEND
 import ru.romanow.openapi.test.model.StateInfo
 import ru.romanow.openapi.test.web.ServerApi
 
@@ -47,7 +47,8 @@ class ServerTest {
                             objectMapperConfig().defaultObjectMapper(jackson())
                         )
                     )
-                    .addFilter(ErrorLoggingFilter())
+                    .addFilter(RequestLoggingFilter())
+                    .addFilter(ResponseLoggingFilter())
                     .setBaseUri("http://localhost:8080")
             }
         )
@@ -84,16 +85,12 @@ class ServerTest {
             .isEqualTo(request)
 
         // Выполнить частичное обновление сервера (purpose)
-        request = buildCreateServerRequest(purpose = FRONTEND)
+        request = CreateServerRequest().also { it.purpose = Purpose.FRONTEND }
         server = api.partialUpdate()
             .idPath(serverId)
             .body(request)
             .executeAs(validatedWith(shouldBeCode(SC_OK)))
-
-        assertThat(server)
-            .usingRecursiveComparison()
-            .ignoringFields("id", "state.id")
-            .isEqualTo(request)
+        assertThat(server.purpose).isEqualTo(Purpose.FRONTEND)
 
         // Выполнить полное обновление сервера (latency, bandwidth, state.city)
         // Выполнить частичное обновление сервера (purpose)

@@ -4,8 +4,3 @@ data class {{classname}} (
     var {{name}}: {{#isArray}}{{#isList}}{{#uniqueItems}}Set{{/uniqueItems}}{{^uniqueItems}}List{{/uniqueItems}}{{/isList}}{{^isList}}Array{{/isList}}<{{^items.isEnum}}{{^items.isPrimitiveType}}{{/items.isPrimitiveType}}{{{items.dataType}}}{{/items.isEnum}}{{#items.isEnum}}{{{nameInCamelCase}}}{{/items.isEnum}}>{{/isArray}}{{^isEnum}}{{^isArray}}{{{dataType}}}{{/isArray}}{{/isEnum}}{{#isEnum}}{{^isArray}}{{{nameInCamelCase}}}{{/isArray}}{{/isEnum}}? = null{{^-last}},{{/-last}}
 {{/vars}}
 )
-{{#hasEnums}}{{#vars}}{{#isEnum}}
-enum class {{{nameInCamelCase}}} {
-    {{#allowableValues}}{{#enumVars}}{{&name}}{{^-last}}, {{/-last}}{{/enumVars}}{{/allowableValues}}
-}
-{{/isEnum}}{{/vars}}{{/hasEnums}}

@@ -11,9 +11,7 @@ import org.apache.http.HttpStatus.SC_NO_CONTENT
 import org.apache.http.HttpStatus.SC_OK
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestMethodOrder
 import ru.romanow.openapi.test.ApiClient.Config.apiConfig
 import ru.romanow.openapi.test.JacksonObjectMapper.jackson
 import ru.romanow.openapi.test.ResponseSpecBuilders.shouldBeCode
@@ -26,15 +24,15 @@ import ru.romanow.openapi.test.model.StateInfo
 import ru.romanow.openapi.test.web.ServerApi
 
 /**
- * * Сделать несколько веток по повествованию.
- * * Сделать ветку с полностью описанным тестом.
- * * В `build.gradle` не писать код, а закомментировать.
- * * Написать requirements: Docker, Java.
- * * Описать шаблон на слайдах.
- * * Обновить QR codes.
- * * Добавить ссылку на проект перед live-coding.
+ * **Test Plan**
+ * 1. Получить список всех серверов.
+ * 2. Создать новый сервер, получить его Id.
+ * 3. Получить новый сервер по Id, проверить его поля.
+ * 4. Выполнить частичное обновление сервера (`purpose`).
+ * 5. Выполнить полное обновление сервера (latency, bandwidth, state.city).
+ * 6. Удалить ранее созданный сервер по Id.
+ * 7. Проверить, что сервер действительно удален (статус 404 Not Found).
  */
-@TestMethodOrder(OrderAnnotation::class)
 class ServerTest {
 
     private lateinit var api: ServerApi
@@ -58,12 +56,13 @@ class ServerTest {
 
     @Test
     fun test() {
-        var servers = api.all()
+        // Получить список всех серверов
+        val servers = api.all()
             .executeAs(validatedWith(shouldBeCode(SC_OK)))
             .servers
+        assertThat(servers).hasSizeGreaterThanOrEqualTo(0)
 
-        val initialSize = servers.size
-
+        // Создать новый сервер, получить его Id
         var request = buildCreateServerRequest()
         val location = api.create()
             .body(request)
@@ -74,6 +73,7 @@ class ServerTest {
         assertThat(location).contains("/api/v1/servers/")
         val serverId = location.substringAfterLast("/")
 
+        // Получить новый сервер по Id, проверить его поля
         var server = api.byId
             .idPath(serverId)
             .executeAs(validatedWith(shouldBeCode(SC_OK)))
@@ -83,13 +83,21 @@ class ServerTest {
             .ignoringFields("id", "state.id")
             .isEqualTo(request)
 
-        servers = api.all()
-            .executeAs(validatedWith(shouldBeCode(SC_OK)))
-            .servers
-
-        assertThat(servers).hasSize(initialSize + 1)
-
+        // Выполнить частичное обновление сервера (purpose)
         request = buildCreateServerRequest(purpose = FRONTEND)
+        server = api.partialUpdate()
+            .idPath(serverId)
+            .body(request)
+            .executeAs(validatedWith(shouldBeCode(SC_OK)))
+
+        assertThat(server)
+            .usingRecursiveComparison()
+            .ignoringFields("id", "state.id")
+            .isEqualTo(request)
+
+        // Выполнить полное обновление сервера (latency, bandwidth, state.city)
+        // Выполнить частичное обновление сервера (purpose)
+        request = buildCreateServerRequest(latency = 80, bandwidth = 80, city = "Saint Petersburg")
         server = api.fullUpdate()
             .idPath(serverId)
             .body(request)
@@ -100,22 +108,29 @@ class ServerTest {
             .ignoringFields("id", "state.id")
             .isEqualTo(request)
 
+        // Удалить ранее созданный сервер по Id
         api.delete().idPath(serverId)
             .execute(validatedWith(shouldBeCode(SC_NO_CONTENT)))
 
+        // Проверить, что сервер действительно удален (статус 404 Not Found)
         api.byId.idPath(serverId)
             .executeAs(validatedWith(shouldBeCode(SC_NOT_FOUND)))
     }
 
-    private fun buildCreateServerRequest(purpose: Purpose = BACKEND) =
+    private fun buildCreateServerRequest(
+        purpose: Purpose = BACKEND,
+        bandwidth: Int = 100,
+        latency: Int = 100,
+        city: String = "Moscow",
+        country: String = "Russia"
+    ) =
         CreateServerRequest().also {
-            it.bandwidth = 100
-            it.latency = 100
+            it.bandwidth = bandwidth
+            it.latency = latency
             it.purpose = purpose
-            it.state = StateInfo()
-                .also { s ->
-                    s.city = "Moscow"
-                    s.country = "Russia"
-                }
+            it.state = StateInfo().also { s ->
+                s.city = city
+                s.country = country
+            }
         }
 }

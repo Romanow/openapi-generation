@@ -4,22 +4,44 @@
 
 ## Аннотация
 
-Часто для решения одной бизнес задачи требуется коммуникация и совместная разработка нескольких команд. В микросервисной
-архитектуре задача упрощается, ведь сервисы имеют разную кодовую базу и взаимодействуют друг с другом по API. А значит
-требуется лишь договориться об общем API в начале разработки. Но так ли все просто и как автоматизировать этот процесс
-рассмотрим в нашем докладе.
+Чтобы end-2-end тесты были максимально полезными, их нужно начинать писать параллельно с разработкой самой задачи. Но
+как это сделать прозрачно, ведь API может поменяться как во время разработки, так и в процессе доработок по другим
+задачам. Рассмотрим подход Contract First на базе OpenAPI как средство поддержания актуальности e2e тестов.
 
-## План доклада
+## План
 
-1. Постановка задачи: коммуникация между командами разработки при совместной работе над одной задачей. [5m]
-2. Что такое контракт? OpenAPI. [2m]
-3. Contract First vs. Code First. Плюсы и минусы подхода. [5m]
-4. Рассматриваем что умеет проект [OpenAPI Generator](https://openapi-generator.tech/). [5m]
-5. Генерируем код по контракту на клиенте и сервере, разбираем что получилось. [10m]
-    * убираем лишние файлы;
-6. Используем свои шаблоны генерации кода по OpenAPI: [15]
-    * структура шаблона;
-7. Вместо выводов: как поддержать баланс между чувством прекрасного и сгенерированным кодом? [5m]
+1. Как быстро начать автоматизацию задачи и следить за изменениями в автоматизированном режиме?
+2. Что такое контракт? OpenAPI.
+3. Рассматриваем что умеет проект [OpenAPI Generator](https://openapi-generator.tech/)
+4. Берем OpenAPI Generator и по контракту генерируем модели и клиента `RestAssured`.
+5. Убираем лишние файлы.
+6. Модифицируем шаблон.
+7. А что делать, если реализация еще недоступна? С помощью Postman и OpenAPI создаем Mock Server и делаем вызовы.
+8. Вместо выводов: как максимально быстро реагировать в тестах на изменения в коде?
+
+## Подготовка
+
+Для выполнения мастер-класса нужно:
+
+1. Java 17: [установка](https://www.oracle.com/java/technologies/downloads/#java17).
+2. Docker: [установка](https://docs.docker.com/engine/install/).
+3. OpenAPI generator: [установка](https://openapi-generator.tech/docs/installation/).
+4. Postman: [установка](https://www.postman.com/downloads/).
+
+Код проекта: [openapi-generation](https://github.com/Romanow/openapi-generation).
+
+```shell
+$ git clone git@github.com:Romanow/openapi-generation.git
+$ ./gradlew clean build
+
+```
+
+Сервис `servers` развернут по адресу https://servers.romanow-alex.ru](https://servers.romanow-alex.ru) (на время
+доклада). Либо можно запустить локально:
+
+```shell
+$ docker compose up -d --wait
+```
 
 ## Доклад
 
@@ -38,6 +60,14 @@ Postman Mock Server).
 Как контролировать корректность данных, которые будут в заглушках, мы не будем рассматривать, скажу лишь, что стоит
 смотреть в сторону [контрактных тестов](https://github.com/Romanow/scc-contracts)
 ([Использование Spring Cloud Contract как альтернатива для интеграционных тестов](https://www.youtube.com/watch?v=iavb9QiD60Y)).
+
+### Как быстро начать автоматизацию задачи и следить за изменениями в автоматизированном режиме?
+
+Когда вашу систему разрабатывают несколько команд, сложно следить за актуальностью моделей и API (кто-то что-то поменял
+и забыл вас известить об этом). Хотелось бы отлавливать ситуацию, что что-то поменялось, как можно раньше, например
+на этапе компиляции.
+
+Так же, когда появляется новый сервис, для старта автоматизации приходится писать много boilerplate кода.
 
 ### Что такое контракт? OpenAPI
 
@@ -89,7 +119,7 @@ Postman Mock Server).
 
 ```shell
 # установка OpenAPI Generator
-$ brew install openapi-generator
+$ npm install @openapitools/openapi-generator-cli -g
 
 ```
 
@@ -222,7 +252,7 @@ $ openapi-generator generate \
 Для начала надо выгрузить шаблон:
 
 ```shell
-$ openapi-generator author template -g kotlin --library jvm-ktor -o openapi/client/templates
+$ openapi-generator author template -g kotlin --library jvm-ktor -o openapi/templates
 ```
 
 Заходим в [openapi/client/templates](openapi/client/templates) и видим большое количество шаблонов:
@@ -231,10 +261,10 @@ $ openapi-generator author template -g kotlin --library jvm-ktor -o openapi/clie
 
 Файлов много, но по сути есть 5 входных типов файлов, а остальные просто являются частью других шаблонов:
 
-* [API](openapi/client/templates/libraries/jvm-ktor/api.mustache) – клиент или сервер;
-* [APIDocs](openapi/client/templates/api_doc.mustache) – markdown описание API;
-* [Model](openapi/client/templates/model.mustache) – модели;
-* [ModelDocs](openapi/client/templates/model_doc.mustache) – markdown описание моделей;
+* [API](openapi/templates/libraries/jvm-ktor/api.mustache) – клиент или сервер;
+* [APIDocs](openapi/templates/api_doc.mustache) – markdown описание API;
+* [Model](openapi/templates/model.mustache) – модели;
+* [ModelDocs](openapi/templates/model_doc.mustache) – markdown описание моделей;
 * SupportingFiles – дополнительные файлы.
 
 Нам нужна кастомизация моделей, поэтому удаляем лишнее и оставляем только три файла:
@@ -243,99 +273,99 @@ $ openapi-generator author template -g kotlin --library jvm-ktor -o openapi/clie
 * [data class](openapi/client/templates/data_class.mustache) – `data class`;
 * [enum](openapi/client/templates/enum_class.mustache) – `enum`.
 
-Откатим изменения в [openapi/client/templates](openapi/client/templates):
+Для примера рассмотрим шаблон [`model`](openapi/client/templates/model.mustache):
 
-```shell
-$ rm -r openapi/client/templates
-$ git checkout master openapi/client/templates
+```
+{{>licenseInfo}}
+package {{modelPackage}}
+
+{{#imports}}
+import {{import}}
+{{/imports}}
+{{#models}}{{#model}}
+{{#isEnum}}{{>enum_class}}{{/isEnum}}{{^isEnum}}{{>data_class}}{{/isEnum}}
+{{/model}}{{/models}}
 
 ```
 
-Для примера рассмотрим шаблон [`data class`](openapi/client/templates/data_class.mustache):
+* `{{>...}}` – подключение шаблона;
+* `{{...}}` – обращение к значению переменной;
+* `{{#...}} .... {{\...}}` – итерация в цикле или проверка, что такая переменная существует.
+
+Т.е. в этом примере подключается шаблон [`licenseInfo.mustache`](openapi/client/templates/licenseInfo.mustache), а
+потом, если модель – enum, то подключаем шаблон [`enum_class.mustache`](openapi/client/templates/enum_class.mustache),
+иначе [`data_class.mustache`](openapi/client/templates/data_class.mustache).
 
 ```
-/**
- * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech) (6.5.0).
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
 data class {{classname}} (
 {{#vars}}
     var {{name}}: {{#isArray}}{{#isList}}{{#uniqueItems}}Set{{/uniqueItems}}{{^uniqueItems}}List{{/uniqueItems}}{{/isList}}{{^isList}}Array{{/isList}}<{{^items.isEnum}}{{^items.isPrimitiveType}}{{/items.isPrimitiveType}}{{{items.dataType}}}{{/items.isEnum}}{{#items.isEnum}}{{{nameInCamelCase}}}{{/items.isEnum}}>{{/isArray}}{{^isEnum}}{{^isArray}}{{{dataType}}}{{/isArray}}{{/isEnum}}{{#isEnum}}{{^isArray}}{{{nameInCamelCase}}}{{/isArray}}{{/isEnum}}? = null{{^-last}},{{/-last}}
 {{/vars}}
 )
-{{#hasEnums}}{{#vars}}{{#isEnum}}
-enum class {{{nameInCamelCase}}} {
-    {{#allowableValues}}{{#enumVars}}{{&name}}{{^-last}}, {{/-last}}{{/enumVars}}{{/allowableValues}}
-}
-{{/isEnum}}{{/vars}}{{/hasEnums}}
 ```
-
-* `{{...}}` – обращение к значению переменной;
-* `{{#...}} .... {{\...}}` – итерация в цикле или проверка, что такая переменная существует.
 
 OpenAPI generator разбирает OpenAPI и собираем объект, который передает в шаблонизатор:
 
 ```json
 {
-  "importPath": "ru.romanow.openapi.client.models.CreateServerRequest",
-  "model": {
-    "name": "CreateServerRequest",
-    "classname": "CreateServerRequest",
-    "isPrimitiveType": false,
-    "vars": [
-      {
-        "openApiType": "string",
-        "dataType": "kotlin.String",
-        "name": "purpose",
-        "baseType": "kotlin.String",
-        "required": true,
-        "deprecated": false,
-        "isPrimitiveType": true,
-        "isContainer": false,
-        "isString": true,
-        "isNumeric": false,
-        "isInteger": false,
-        "isShort": false,
-        "isLong": false,
-        "isUnboundedInteger": false,
-        "isNumber": false,
-        "isFloat": false,
-        "isDouble": false,
-        "isDecimal": false,
-        "isByteArray": false,
-        "isBinary": false,
-        "isFile": false,
-        "isBoolean": false,
-        "isDate": false,
-        "isDateTime": false,
-        "isUuid": false,
-        "isEmail": false,
-        "isPassword": false,
-        "isNull": false,
-        "isVoid": false,
-        "isFreeFormObject": false,
-        "isAnyType": false,
-        "isArray": false,
-        "isMap": false,
-        "isEnum": false,
-        "isInnerEnum": false,
-        "isEnumRef": false,
-        "isReadOnly": false,
-        "isWriteOnly": false,
-        "isNullable": false,
-        "vars": [],
-        "requiredVars": [],
-        "hasValidation": false,
-        "isInherited": false,
-        "nameInCamelCase": "Purpose",
-        "nameInSnakeCase": "PURPOSE",
-        "datatype": "kotlin.String",
-        "hasItems": false,
-        "isEnumOrRef": false
-      }
-    ]
-  }
+    "importPath": "ru.romanow.openapi.client.models.CreateServerRequest",
+    "model": {
+        "name": "CreateServerRequest",
+        "classname": "CreateServerRequest",
+        "isPrimitiveType": false,
+        "vars": [
+            {
+                "openApiType": "string",
+                "dataType": "kotlin.String",
+                "name": "purpose",
+                "baseType": "kotlin.String",
+                "required": true,
+                "deprecated": false,
+                "isPrimitiveType": true,
+                "isContainer": false,
+                "isString": true,
+                "isNumeric": false,
+                "isInteger": false,
+                "isShort": false,
+                "isLong": false,
+                "isUnboundedInteger": false,
+                "isNumber": false,
+                "isFloat": false,
+                "isDouble": false,
+                "isDecimal": false,
+                "isByteArray": false,
+                "isBinary": false,
+                "isFile": false,
+                "isBoolean": false,
+                "isDate": false,
+                "isDateTime": false,
+                "isUuid": false,
+                "isEmail": false,
+                "isPassword": false,
+                "isNull": false,
+                "isVoid": false,
+                "isFreeFormObject": false,
+                "isAnyType": false,
+                "isArray": false,
+                "isMap": false,
+                "isEnum": false,
+                "isInnerEnum": false,
+                "isEnumRef": false,
+                "isReadOnly": false,
+                "isWriteOnly": false,
+                "isNullable": false,
+                "vars": [],
+                "requiredVars": [],
+                "hasValidation": false,
+                "isInherited": false,
+                "nameInCamelCase": "Purpose",
+                "nameInSnakeCase": "PURPOSE",
+                "datatype": "kotlin.String",
+                "hasItems": false,
+                "isEnumOrRef": false
+            }
+        ]
+    }
 }
 ```
 
@@ -344,9 +374,9 @@ OpenAPI generator разбирает OpenAPI и собираем объект, �
 
 ```yaml
 files:
-  model.mustache:
-    templateType: Model
-    destinationFilename: .kt
+    model.mustache:
+        templateType: Model
+        destinationFilename: .kt
 ```
 
 ```shell
@@ -361,8 +391,9 @@ $ openapi-generator generate \
 
 Если нам не требуется модифицировать шаблон (например
 [ApiController](server/build/generated/src/main/kotlin/ru/romanow/openapi/server/web/ApiController.kt)
-в [server](/openapi/server/config.yml)), то мы просто его не меняем и он создается на основе базовых шаблонов. Если
-требуется убрать сгенерированные файлы, то просто описываем их
+в [server](/openapi/server/config.yml)), то мы просто его не меняем и он создается на основе базовых шаблонов.
+
+Если требуется убрать сгенерированные файлы, то описываем их
 в [\.openapi-generator-ignore](openapi/client/.openapi-generator-ignore).
 
 ### Вместо выводов: как поддержать баланс между чувством прекрасного и сгенерированным кодом?
@@ -374,11 +405,9 @@ $ openapi-generator generate \
 3. OpenAPI generator позволяет кастомизировать шаблоны, следовательно, вы можете сгенерировать код, удовлетворяющий Code
    Style и вашему чувству прекрасного.
 
-## Пример
+### Вместо выводов: как максимально быстро реагировать в тестах на изменения в коде?
 
-```shell
-$ docker compose up -d
-$ ./gradlew clean build
-$ ./gradlew :server:bootRun
-$ java -jar client/build/libs/client.jar
-```
+1. Возможность генерировать модели и клиента по OpenAPI позволяет вам быстрее реагировать на изменения в реализации.
+2. OpenAPI generator сгенерирует за вас весь boilerplate, вам же останется лишь описать сценарии.
+3. OpenAPI generator позволяет кастомизировать шаблоны, следовательно, вы можете сгенерировать код, удовлетворяющий Code
+   Style и вашему чувству прекрасного.

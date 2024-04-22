@@ -55,7 +55,7 @@ resource "digitalocean_app" "application" {
     database {
       name         = var.project_name
       cluster_name = "${var.project_name}-db"
-      engine       = "pg"
+      engine       = "PG"
       production   = false
       db_name      = var.database_name
       db_user      = var.database_user

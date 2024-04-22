@@ -27,7 +27,7 @@ resource "digitalocean_database_connection_pool" "connection_pool" {
   db_name    = var.database_name
   user       = var.database_user
   mode       = "transaction"
-  name       = "${var.project_name}-connection-pool"
+  name       = var.project_name
   size       = 10
   depends_on = [
     digitalocean_database_cluster.postgres,
@@ -82,7 +82,7 @@ resource "digitalocean_app" "application" {
 
       env {
         key   = "DATABASE_NAME"
-        value = var.database_name
+        value = digitalocean_database_connection_pool.connection_pool.name
       }
 
       env {

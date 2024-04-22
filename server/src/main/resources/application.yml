@@ -6,7 +6,8 @@ spring:
   application.name: server
   main.banner-mode: off
   jpa:
-    hibernate.ddl-auto: update
+    hibernate.ddl-auto: none
+    generate-ddl: false
     open-in-view: false
 
 management:

@@ -1,16 +1,11 @@
 package ru.romanow.openapi.server.domain
 
 import jakarta.persistence.*
-import jakarta.persistence.CascadeType.MERGE
-import jakarta.persistence.CascadeType.PERSIST
-import jakarta.persistence.CascadeType.REFRESH
+import jakarta.persistence.CascadeType.*
 import ru.romanow.openapi.server.model.Purpose
 
 @Entity
-@Table(
-    name = "servers",
-    indexes = [Index(name = "idx_servers_state_id", columnList = "state_id")]
-)
+@Table(name = "servers")
 data class Server(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

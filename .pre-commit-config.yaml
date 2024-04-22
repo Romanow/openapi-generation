@@ -16,3 +16,10 @@ repos:
     hooks:
       - id: remove-crlf
       - id: remove-tabs
+
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.83.6
+    hooks:
+      - id: terraform_fmt
+      - id: terraform_validate
+      - id: terraform_tflint

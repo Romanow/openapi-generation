@@ -69,6 +69,18 @@ variable "database_version" {
   default     = 15
 }
 
+variable "database_size" {
+  description = "Database size"
+  type        = string
+  default     = "db-s-1vcpu-1gb"
+}
+
+variable "database_disk_size" {
+  type        = string
+  default     = "10240"
+  description = "Database droplet size (in Mb)"
+}
+
 variable "database_name" {
   description = "Database name"
   type        = string

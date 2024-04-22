@@ -9,7 +9,7 @@ terraform {
   cloud {
     organization = "Romanow-Pride"
     workspaces {
-      name = "main"
+      name = "openapi-generation"
     }
   }
 }

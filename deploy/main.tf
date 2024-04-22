@@ -1,3 +1,41 @@
+resource "digitalocean_database_cluster" "postgres" {
+  name             = "${var.project_name}-db"
+  engine           = "pg"
+  version          = var.database_version
+  size             = var.database_size
+  storage_size_mib = var.database_disk_size
+  region           = var.region
+  node_count       = 1
+  maintenance_window {
+    day  = "monday"
+    hour = "00:00:00"
+  }
+}
+
+resource "digitalocean_database_db" "database" {
+  cluster_id = digitalocean_database_cluster.postgres.id
+  name       = var.database_name
+}
+
+resource "digitalocean_database_user" "user" {
+  cluster_id = digitalocean_database_cluster.postgres.id
+  name       = var.database_user
+}
+
+resource "digitalocean_database_connection_pool" "connection_pool" {
+  cluster_id = digitalocean_database_cluster.postgres.id
+  db_name    = var.database_name
+  mode       = "transaction"
+  name       = "${var.project_name}-connection-pool"
+  size       = 10
+  user       = var.database_user
+}
+
+resource "time_sleep" "wait_30_seconds" {
+  create_duration = "30s"
+  depends_on      = [digitalocean_database_connection_pool.connection_pool]
+}
+
 resource "digitalocean_app" "application" {
   spec {
     name   = "${var.project_name}-app"
@@ -29,7 +67,17 @@ resource "digitalocean_app" "application" {
 
       env {
         key   = "DATABASE_URL"
-        value = "$${${var.project_name}.JDBC_DATABASE_URL}"
+        value = digitalocean_database_connection_pool.connection_pool.host
+      }
+
+      env {
+        key   = "DATABASE_PORT"
+        value = digitalocean_database_connection_pool.connection_pool.port
+      }
+
+      env {
+        key   = "DATABASE_NAME"
+        value = var.database_name
       }
 
       env {
@@ -39,7 +87,7 @@ resource "digitalocean_app" "application" {
 
       env {
         key   = "DATABASE_PASSWORD"
-        value = "$${${var.project_name}.PASSWORD}"
+        value = digitalocean_database_connection_pool.connection_pool.password
         type  = "SECRET"
       }
 
@@ -53,13 +101,9 @@ resource "digitalocean_app" "application" {
     }
 
     database {
-      name         = var.project_name
       cluster_name = "${var.project_name}-db"
-      engine       = "PG"
+      engine       = "pg"
       production   = false
-      db_name      = var.database_name
-      db_user      = var.database_user
-      version      = var.database_version
     }
   }
 }

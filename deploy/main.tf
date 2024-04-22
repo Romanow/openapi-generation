@@ -1,6 +1,6 @@
 resource "digitalocean_database_cluster" "postgres" {
-  name             = "${var.project_name}-db"
-  engine           = "pg"
+  engine           = "PG"
+  name             = var.database_name
   version          = var.database_version
   size             = var.database_size
   storage_size_mib = var.database_disk_size
@@ -25,10 +25,15 @@ resource "digitalocean_database_user" "user" {
 resource "digitalocean_database_connection_pool" "connection_pool" {
   cluster_id = digitalocean_database_cluster.postgres.id
   db_name    = var.database_name
+  user       = var.database_user
   mode       = "transaction"
   name       = "${var.project_name}-connection-pool"
   size       = 10
-  user       = var.database_user
+  depends_on = [
+    digitalocean_database_cluster.postgres,
+    digitalocean_database_db.database,
+    digitalocean_database_db.database
+  ]
 }
 
 resource "time_sleep" "wait_30_seconds" {
@@ -98,12 +103,6 @@ resource "digitalocean_app" "application" {
         success_threshold     = 1
         failure_threshold     = 10
       }
-    }
-
-    database {
-      cluster_name = "${var.project_name}-db"
-      engine       = "pg"
-      production   = false
     }
   }
 }

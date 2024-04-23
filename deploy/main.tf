@@ -92,7 +92,7 @@ resource "digitalocean_app" "application" {
 
       env {
         key   = "DATABASE_PASSWORD"
-        value = digitalocean_database_connection_pool.connection_pool.password
+        value = digitalocean_database_cluster.postgres.password
       }
 
       health_check {

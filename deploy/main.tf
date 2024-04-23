@@ -22,23 +22,13 @@ resource "digitalocean_database_user" "user" {
   name       = var.database_user
 }
 
-resource "digitalocean_database_connection_pool" "connection_pool" {
-  cluster_id = digitalocean_database_cluster.postgres.id
-  db_name    = var.database_name
-  user       = var.database_user
-  mode       = "transaction"
-  name       = var.project_name
-  size       = 15
-  depends_on = [
-    digitalocean_database_cluster.postgres,
-    digitalocean_database_db.database,
-    digitalocean_database_db.database
-  ]
-}
-
 resource "time_sleep" "wait_30_seconds" {
   create_duration = "30s"
-  depends_on      = [digitalocean_database_connection_pool.connection_pool]
+    depends_on = [
+        digitalocean_database_cluster.postgres,
+        digitalocean_database_db.database,
+        digitalocean_database_db.database
+    ]
 }
 
 resource "digitalocean_app" "application" {
@@ -72,17 +62,17 @@ resource "digitalocean_app" "application" {
 
       env {
         key   = "DATABASE_URL"
-        value = digitalocean_database_connection_pool.connection_pool.host
+        value = digitalocean_database_cluster.postgres.host
       }
 
       env {
         key   = "DATABASE_PORT"
-        value = digitalocean_database_connection_pool.connection_pool.port
+        value = digitalocean_database_cluster.postgres.port
       }
 
       env {
         key   = "DATABASE_NAME"
-        value = digitalocean_database_connection_pool.connection_pool.name
+        value = digitalocean_database_cluster.postgres.name
       }
 
       env {

@@ -94,7 +94,6 @@ resource "digitalocean_app" "application" {
         key   = "DATABASE_PASSWORD"
         value = digitalocean_database_user.user.password
       }
-
       health_check {
         http_path             = "/manage/health"
         initial_delay_seconds = 20

@@ -6,6 +6,8 @@ jobs:
   plan:
     name: Destroy DigitalOcean app
     runs-on: ubuntu-latest
+    environment:
+      name: digitalocean
     steps:
       - uses: actions/checkout@v3
 

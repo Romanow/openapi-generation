@@ -3,6 +3,7 @@ plugins {
     id "org.jetbrains.kotlin.plugin.spring"
     id "org.jetbrains.kotlin.plugin.jpa"
     id "org.openapi.generator"
+    id "com.gorylenko.gradle-git-properties"
 }
 
 dependencies {
@@ -38,8 +39,26 @@ sourceSets {
     }
 }
 
+gitProperties {
+    dateFormat = "dd.MM.yyyy HH:mm:ss"
+    dateFormatTimeZone = "Europe/Moscow"
+    extProperty = "gitProps"
+}
+
+generateGitProperties.outputs.upToDateWhen { false }
+
 bootJar {
     archiveFileName = "${project.name}.jar"
+
+    manifest {
+        attributes(
+            "Application-Name": "${project.name}",
+            "Application-Version": "${project.version}",
+            "Git-Branch": "${-> project.ext.gitProps["git.branch"]}",
+            "Build-Revision": "${-> project.ext.gitProps["git.commit.id.abbrev"]}",
+            "Commit-Time": "${-> project.ext.gitProps["git.commit.time"]}"
+        )
+    }
 }
 
 jar {

@@ -4,7 +4,8 @@ server:
 spring:
   profiles.active: local
   application.name: server
-  main.banner-mode: off
+  config:
+    import: optional:git.properties
   jpa:
     hibernate.ddl-auto: none
     generate-ddl: false

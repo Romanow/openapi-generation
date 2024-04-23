@@ -24,11 +24,11 @@ resource "digitalocean_database_user" "user" {
 
 resource "time_sleep" "wait_30_seconds" {
   create_duration = "30s"
-    depends_on = [
-        digitalocean_database_cluster.postgres,
-        digitalocean_database_db.database,
-        digitalocean_database_db.database
-    ]
+  depends_on = [
+    digitalocean_database_cluster.postgres,
+    digitalocean_database_db.database,
+    digitalocean_database_db.database
+  ]
 }
 
 resource "digitalocean_app" "application" {

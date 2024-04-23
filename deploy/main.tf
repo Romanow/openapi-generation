@@ -28,7 +28,7 @@ resource "digitalocean_database_connection_pool" "connection_pool" {
   user       = var.database_user
   mode       = "transaction"
   name       = var.project_name
-  size       = 15
+  size       = 10
   depends_on = [
     digitalocean_database_cluster.postgres,
     digitalocean_database_db.database,

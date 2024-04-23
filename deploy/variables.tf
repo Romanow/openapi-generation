@@ -24,13 +24,13 @@ variable "region" {
 variable "backend_count" {
   description = "Instance count"
   type        = number
-  default     = 1
+  default     = 3
 }
 
 variable "backend_size" {
   description = "Instance size"
   type        = string
-  default     = "basic-xxs"
+  default     = "basic-s"
 }
 
 variable "application_port" {
@@ -66,7 +66,7 @@ variable "application_profile" {
 variable "database_version" {
   description = "Database version"
   type        = number
-  default     = 15
+  default     = 14
 }
 
 variable "database_size" {

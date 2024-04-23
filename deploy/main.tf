@@ -28,7 +28,7 @@ resource "digitalocean_database_connection_pool" "connection_pool" {
   user       = var.database_user
   mode       = "transaction"
   name       = var.project_name
-  size       = 10
+  size       = 15
   depends_on = [
     digitalocean_database_cluster.postgres,
     digitalocean_database_db.database,
@@ -92,7 +92,7 @@ resource "digitalocean_app" "application" {
 
       env {
         key   = "DATABASE_PASSWORD"
-        value = digitalocean_database_connection_pool.connection_pool.password
+        value = digitalocean_database_cluster.postgres.password
         type  = "SECRET"
       }
 

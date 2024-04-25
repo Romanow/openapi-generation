@@ -21,10 +21,21 @@ variable "region" {
   default     = "ams3"
 }
 
+variable "docker_hub_login" {
+  description = "Docker hub login"
+  type        = string
+  default     = "romanowalex"
+}
+
+variable "docker_hub_token" {
+  description = "Docker hub token"
+  type        = string
+}
+
 variable "backend_count" {
   description = "Instance count"
   type        = number
-  default     = 3
+  default     = 1
 }
 
 variable "backend_size" {
@@ -73,6 +84,12 @@ variable "database_size" {
   description = "Database size"
   type        = string
   default     = "db-s-1vcpu-1gb"
+}
+
+variable "database_disk_size" {
+  type        = string
+  default     = "10240"
+  description = "Database droplet size (in Mb)"
 }
 
 variable "database_name" {

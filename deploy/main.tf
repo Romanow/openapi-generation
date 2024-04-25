@@ -1,10 +1,11 @@
 resource "digitalocean_database_cluster" "postgres" {
-  engine     = "PG"
-  name       = var.database_name
-  version    = var.database_version
-  size       = var.database_size
-  region     = var.region
-  node_count = 1
+  engine           = "PG"
+  name             = var.database_name
+  version          = var.database_version
+  size             = var.database_size
+  storage_size_mib = var.database_disk_size
+  region           = var.region
+  node_count       = 1
   maintenance_window {
     day  = "monday"
     hour = "00:00:00"
@@ -58,10 +59,11 @@ resource "digitalocean_app" "application" {
       http_port          = var.application_port
 
       image {
-        registry_type = "DOCKER_HUB"
-        registry      = var.application_image_repository
-        repository    = var.application_image_name
-        tag           = var.application_image_tag
+        registry_type        = "DOCKER_HUB"
+        registry             = var.application_image_repository
+        repository           = var.application_image_name
+        tag                  = var.application_image_tag
+        registry_credentials = "${var.docker_hub_login}:${var.docker_hub_token}"
       }
 
       env {

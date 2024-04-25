@@ -113,3 +113,4 @@ jobs:
         env:
           TF_TOKEN_app_terraform_io: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
           TF_VAR_do_token: ${{ secrets.DIGITAL_OCEAN_TOKEN }}
+          TF_VAR_docker_hub_token: ${{ secrets.DOCKER_HUB_TOKEN }}

@@ -1,10 +1,10 @@
 resource "digitalocean_database_cluster" "postgres" {
-  engine           = "PG"
-  name             = var.database_name
-  version          = var.database_version
-  size             = var.database_size
-  region           = var.region
-  node_count       = 1
+  engine     = "PG"
+  name       = var.database_name
+  version    = var.database_version
+  size       = var.database_size
+  region     = var.region
+  node_count = 1
   maintenance_window {
     day  = "monday"
     hour = "00:00:00"

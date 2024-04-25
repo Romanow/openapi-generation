@@ -3,7 +3,6 @@ resource "digitalocean_database_cluster" "postgres" {
   name             = var.database_name
   version          = var.database_version
   size             = var.database_size
-  storage_size_mib = var.database_disk_size
   region           = var.region
   node_count       = 1
   maintenance_window {

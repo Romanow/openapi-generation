@@ -3,7 +3,7 @@ terraform {
   required_providers {
     digitalocean = {
       source  = "digitalocean/digitalocean"
-      version = ">= 2.36"
+      version = "2.29.0"
     }
     time = {
       source  = "hashicorp/time"

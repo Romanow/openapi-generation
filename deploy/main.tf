@@ -47,7 +47,7 @@ resource "digitalocean_app" "application" {
     region = var.region
 
     domain {
-      name = "${var.project_name}.${var.domain}"
+      name = "sqadays.${var.domain}"
       zone = var.domain
       type = "PRIMARY"
     }

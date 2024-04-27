@@ -29,8 +29,8 @@ dependencies {
 openApiGenerate {
     generatorName = "java"
     configFile = "$rootDir/openapi/test/config.yml"
-    ignoreFileOverride = "$rootDir/openapi/test/.openapi-generator-ignore"
-    templateDir = "$rootDir/openapi/test/templates"
+//    ignoreFileOverride = "$rootDir/openapi/test/.openapi-generator-ignore"
+//    templateDir = "$rootDir/openapi/test/templates"
 
     inputSpec = "$rootDir/openapi/servers.yml"
     outputDir = "$buildDir/generated"

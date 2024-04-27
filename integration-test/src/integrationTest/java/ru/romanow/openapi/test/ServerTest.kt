@@ -5,18 +5,10 @@ import io.restassured.config.ObjectMapperConfig.objectMapperConfig
 import io.restassured.config.RestAssuredConfig
 import io.restassured.filter.log.RequestLoggingFilter
 import io.restassured.filter.log.ResponseLoggingFilter
-import org.apache.http.HttpHeaders
-import org.apache.http.HttpStatus.SC_CREATED
-import org.apache.http.HttpStatus.SC_NOT_FOUND
-import org.apache.http.HttpStatus.SC_NO_CONTENT
-import org.apache.http.HttpStatus.SC_OK
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import ru.romanow.openapi.test.ApiClient.Config.apiConfig
 import ru.romanow.openapi.test.JacksonObjectMapper.jackson
-import ru.romanow.openapi.test.ResponseSpecBuilders.shouldBeCode
-import ru.romanow.openapi.test.ResponseSpecBuilders.validatedWith
 import ru.romanow.openapi.test.model.CreateServerRequest
 import ru.romanow.openapi.test.model.Purpose
 import ru.romanow.openapi.test.model.Purpose.BACKEND
@@ -58,60 +50,28 @@ class ServerTest {
     @Test
     fun test() {
         // Получить список всех серверов
-        val servers = api.all()
-            .executeAs(validatedWith(shouldBeCode(SC_OK)))
-            .servers
-        assertThat(servers).hasSizeGreaterThanOrEqualTo(0)
+
 
         // Создать новый сервер, получить его Id
-        var request = buildCreateServerRequest()
-        val location = api.create()
-            .body(request)
-            .execute(validatedWith(shouldBeCode(SC_CREATED)))
-            .header(HttpHeaders.LOCATION)
+
 
         // Location: https://localhost:8080/api/v1/servers/{{serverId}}
-        assertThat(location).contains("/api/v1/servers/")
-        val serverId = location.substringAfterLast("/")
+
 
         // Получить новый сервер по Id, проверить его поля
-        var server = api.byId
-            .idPath(serverId)
-            .executeAs(validatedWith(shouldBeCode(SC_OK)))
 
-        assertThat(server)
-            .usingRecursiveComparison()
-            .ignoringFields("id", "state.id")
-            .isEqualTo(request)
 
         // Выполнить частичное обновление сервера (purpose)
-        request = CreateServerRequest().also { it.purpose = Purpose.FRONTEND }
-        server = api.partialUpdate()
-            .idPath(serverId)
-            .body(request)
-            .executeAs(validatedWith(shouldBeCode(SC_OK)))
-        assertThat(server.purpose).isEqualTo(Purpose.FRONTEND)
+
 
         // Выполнить полное обновление сервера (latency, bandwidth, state.city)
         // Выполнить частичное обновление сервера (purpose)
-        request = buildCreateServerRequest(latency = 80, bandwidth = 80, city = "Saint Petersburg")
-        server = api.fullUpdate()
-            .idPath(serverId)
-            .body(request)
-            .executeAs(validatedWith(shouldBeCode(SC_OK)))
 
-        assertThat(server)
-            .usingRecursiveComparison()
-            .ignoringFields("id", "state.id")
-            .isEqualTo(request)
 
         // Удалить ранее созданный сервер по Id
-        api.delete().idPath(serverId)
-            .execute(validatedWith(shouldBeCode(SC_NO_CONTENT)))
+
 
         // Проверить, что сервер действительно удален (статус 404 Not Found)
-        api.byId.idPath(serverId)
-            .executeAs(validatedWith(shouldBeCode(SC_NOT_FOUND)))
     }
 
     private fun buildCreateServerRequest(

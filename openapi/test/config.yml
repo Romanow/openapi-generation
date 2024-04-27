@@ -10,7 +10,7 @@ additionalProperties:
   documentationProvider: none
   hideGenerationTimestamp: true
 
-files:
-  model.mustache:
-    templateType: Model
-    destinationFilename: .java
+#files:
+#  model.mustache:
+#    templateType: Model
+#    destinationFilename: .java

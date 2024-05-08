@@ -1,0 +1,6 @@
+**/pom.xml
+**/README.md
+**/openapitools/**.java
+**/ApiUtil.java
+**/resources/
+**/test/

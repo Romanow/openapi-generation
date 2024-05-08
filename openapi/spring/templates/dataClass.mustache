@@ -1,0 +1,19 @@
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+@Data
+@Accessors(chain = true)
+{{>generatedAnnotation}}
+public class {{classname}} {
+{{#vars}}
+{{#isContainer}}
+    {{#useBeanValidation}}@Valid{{/useBeanValidation}}
+    private {{{datatype}}} {{name}}{{#defaultValue}} = {{{.}}}{{/defaultValue}};
+{{/isContainer}}
+{{^isContainer}}
+    {{#isDate}}@DateTimeFormat(iso = DateTimeFormat.ISO.DATE){{/isDate}}
+    {{#isDateTime}}@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME){{/isDateTime}}
+    private {{{datatype}}} {{name}}{{#isNullable}} = null{{/isNullable}}{{^isNullable}}{{#defaultValue}} = {{{.}}}{{/defaultValue}}{{/isNullable}};
+{{/isContainer}}
+{{/vars}}
+}

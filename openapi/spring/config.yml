@@ -1,0 +1,23 @@
+library: spring-boot
+
+apiPackage: "ru.romanow.openapi.server.web"
+modelPackage: "ru.romanow.openapi.server.model"
+
+apiDocs: false
+apiTests: false
+modelDocs: false
+modelTests: false
+
+additionalProperties:
+  annotationLibrary: none
+  documentationProvider: none
+  skipDefaultInterface: true
+  dateLibrary: java8
+  useResponseEntity: false
+  interfaceOnly: true
+  useTags: true
+
+files:
+  model.mustache:
+    templateType: Model
+    destinationFilename: .java

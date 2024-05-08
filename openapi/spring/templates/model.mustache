@@ -1,0 +1,14 @@
+{{>licenseInfo}}
+package {{modelPackage}}
+
+{{#useBeanValidation}}
+import {{javaxPackage}}.validation.Valid;
+import {{javaxPackage}}.validation.constraints.*;
+{{/useBeanValidation}}
+import {{javaxPackage}}.annotation.Generated;
+import java.util.*;
+{{#models}}{{#model}}
+{{#isEnum}}{{>enumClass}}{{/isEnum}}{{^isEnum}}{{>dataClass}}{{/isEnum}}
+{{/model}}{{/models}}
+
+

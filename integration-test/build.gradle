@@ -36,6 +36,7 @@ openApiGenerate {
     outputDir = "$buildDir/generated"
 }
 
+runKtlintCheckOverMainSourceSet.dependsOn(tasks.openApiGenerate)
 compileKotlin.dependsOn(tasks.openApiGenerate)
 
 sourceSets {

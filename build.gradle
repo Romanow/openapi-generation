@@ -13,7 +13,7 @@ plugins {
 
 ext {
     springBootVersion = "3.2.8"
-    springShellVersion = "3.2.3"
+    springShellVersion = "3.3.2"
     openApiVersion = "2.1.0"
     openApiToolsVersion = "0.2.6"
     jakartaAnnotationsVersion = "2.1.1"

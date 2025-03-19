@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Servers API
-  version: v1
+  version: "1.0"
 servers:
   - url: http://localhost:8080
     description: Local
@@ -10,8 +10,7 @@ paths:
     get:
       tags:
         - server
-      summary: Get server by Id
-      operationId: getById
+      summary: Получить информацию о сервере по ID
       parameters:
         - name: id
           in: path
@@ -21,7 +20,7 @@ paths:
             format: int32
       responses:
         '200':
-          description: OK
+          description: Информация о сервере
           content:
             application/json:
               schema:
@@ -29,8 +28,7 @@ paths:
     put:
       tags:
         - server
-      summary: Full update server by Id
-      operationId: fullUpdate
+      summary: Полное обновление информации о сервере
       parameters:
         - name: id
           in: path
@@ -46,7 +44,7 @@ paths:
         required: true
       responses:
         '200':
-          description: OK
+          description: Информация о сервере
           content:
             application/json:
               schema:
@@ -54,8 +52,7 @@ paths:
     delete:
       tags:
         - server
-      summary: Delete server by Id
-      operationId: delete
+      summary: Удалить сервер
       parameters:
         - name: id
           in: path
@@ -65,12 +62,11 @@ paths:
             format: int32
       responses:
         '204':
-          description: No Content
+          description: Сервер успешно удален
     patch:
       tags:
         - server
-      summary: Edit server by Id
-      operationId: partialUpdate
+      summary: Обновление информации о сервере
       parameters:
         - name: id
           in: path
@@ -86,7 +82,7 @@ paths:
         required: true
       responses:
         '200':
-          description: OK
+          description: Информация о сервере
           content:
             application/json:
               schema:
@@ -95,11 +91,10 @@ paths:
     get:
       tags:
         - server
-      summary: Find all servers
-      operationId: all
+      summary: Получить список всех серверов
       responses:
         '200':
-          description: OK
+          description: Информация о сервере
           content:
             application/json:
               schema:
@@ -107,8 +102,7 @@ paths:
     post:
       tags:
         - server
-      summary: Save new server
-      operationId: create
+      summary: Создать новый сервер
       requestBody:
         content:
           application/json:
@@ -117,7 +111,7 @@ paths:
         required: true
       responses:
         '201':
-          description: Created
+          description: Сервер успешно создан
 components:
   schemas:
     CreateServerRequest:
@@ -173,10 +167,10 @@ components:
           type: string
     ServerResponse:
       required:
-        - bandwidth
         - id
         - latency
         - purpose
+        - bandwidth
         - state
       type: object
       example:

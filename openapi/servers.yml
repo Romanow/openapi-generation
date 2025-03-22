@@ -11,6 +11,7 @@ paths:
       tags:
         - server
       summary: Получить информацию о сервере по ID
+      operationId: getById
       parameters:
         - name: id
           in: path
@@ -29,6 +30,7 @@ paths:
       tags:
         - server
       summary: Полное обновление информации о сервере
+      operationId: fullUpdate
       parameters:
         - name: id
           in: path
@@ -53,6 +55,7 @@ paths:
       tags:
         - server
       summary: Удалить сервер
+      operationId: delete
       parameters:
         - name: id
           in: path
@@ -67,6 +70,7 @@ paths:
       tags:
         - server
       summary: Обновление информации о сервере
+      operationId: partialUpdate
       parameters:
         - name: id
           in: path
@@ -92,6 +96,7 @@ paths:
       tags:
         - server
       summary: Получить список всех серверов
+      operationId: all
       responses:
         '200':
           description: Информация о сервере
@@ -103,6 +108,7 @@ paths:
       tags:
         - server
       summary: Создать новый сервер
+      operationId: create
       requestBody:
         content:
           application/json:

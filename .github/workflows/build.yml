@@ -105,8 +105,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: server/Dockerfile
+          context: server
           platforms: linux/amd64,linux/arm64
           tags: romanowalex/servers:${{ github.ref_name }}
           push: true

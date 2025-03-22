@@ -11,6 +11,7 @@ on:
       - deploy/**
       - build.gradle
       - gradle.properties
+      - .pre-commit-config.yaml
 
 jobs:
   build:

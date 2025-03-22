@@ -11,7 +11,6 @@ on:
       - deploy/**
       - build.gradle
       - gradle.properties
-      - .pre-commit-config.yaml
 
 jobs:
   build:
@@ -114,7 +113,7 @@ jobs:
         uses: peter-evans/dockerhub-description@v4
         with:
           readme-filepath: Docker-README.md
-          repository: romanowalex/openapi-generation
+          repository: romanowalex/servers
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
           short-description: ${{ github.event.repository.description }}
